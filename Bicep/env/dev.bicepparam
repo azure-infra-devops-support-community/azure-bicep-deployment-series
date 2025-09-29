@@ -4,7 +4,7 @@ param deploySSHParam = true
 
 param resourceGroupUKSParam = {
   name: 'ghesdemo'
-  location: 'centralindia'
+  location: 'uksouth'
 }
 
 param tagsParam = {
