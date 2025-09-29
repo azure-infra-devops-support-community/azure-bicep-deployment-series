@@ -3,7 +3,7 @@ param tags object = {}
 param vnet object
 param deploySSH bool = false
 
-resource virtualNetworkResource 'Microsoft.Network/virtualNetworks@2023-09-01' = {
+resource virtualNetworkResource 'Microsoft.Network/virtualNetworks@2024-07-01' = {
   name: vnet.name
   location: location
   tags: tags
@@ -24,12 +24,12 @@ resource virtualNetworkResource 'Microsoft.Network/virtualNetworks@2023-09-01' =
   }
 }
 
-resource networkSecurityGroupResource 'Microsoft.Network/networkSecurityGroups@2023-09-01' = {
+resource networkSecurityGroupResource 'Microsoft.Network/networkSecurityGroups@2024-07-01' = {
   name: '${vnet.name}-nsg-01'
   location: location
 }
 
-resource sshSecurityRuleResource 'Microsoft.Network/networkSecurityGroups/securityRules@2023-11-01' = if (deploySSH) {
+resource sshSecurityRuleResource 'Microsoft.Network/networkSecurityGroups/securityRules@2024-07-01' = if (deploySSH) {
   parent: networkSecurityGroupResource
   name: 'SSH'
   properties: {
