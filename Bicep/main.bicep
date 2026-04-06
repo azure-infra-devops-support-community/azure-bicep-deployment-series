@@ -5,6 +5,7 @@ param tagsParam object
 param vnetParam object
 param vmParam object
 param deploySSHParam bool = false
+param dataDisks array = []
 
 param deploymentNameParam string = 'agentpool'
 
@@ -39,10 +40,8 @@ module virtualMachine 'modules/virtual-machine.bicep' = {
     tags: tagsParam
     subnetId: virtualNetwork.outputs.subnetId
     networkSecurityGroupId: virtualNetwork.outputs.networkSecurityGroupId
+    dataDisks: dataDisks
   }
-  dependsOn: [
-    virtualNetwork
-  ]
 }
 
 module roleAssignment 'modules/role-assignment.bicep' = {

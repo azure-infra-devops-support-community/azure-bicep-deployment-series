@@ -3,8 +3,9 @@ param location string
 param tags object = {}
 param subnetId string
 param networkSecurityGroupId string
+param dataDisks array = []
 
-resource publicIPAddressResource 'Microsoft.Network/publicIPAddresses@2023-09-01' = {
+resource publicIPAddressResource 'Microsoft.Network/publicIPAddresses@2024-07-01' = {
   name: '${vm.name}-pip'
   location: location
   sku: {
@@ -17,7 +18,7 @@ resource publicIPAddressResource 'Microsoft.Network/publicIPAddresses@2023-09-01
   }
 }
 
-resource networkInterfaceResource 'Microsoft.Network/networkInterfaces@2023-09-01' = {
+resource networkInterfaceResource 'Microsoft.Network/networkInterfaces@2024-07-01' = {
   name: '${vm.name}-nic'
   tags: tags
   location: location
@@ -42,7 +43,7 @@ resource networkInterfaceResource 'Microsoft.Network/networkInterfaces@2023-09-0
   }
 }
 
-resource virtualMachineResource 'Microsoft.Compute/virtualMachines@2023-09-01' = {
+resource virtualMachineResource 'Microsoft.Compute/virtualMachines@2024-11-01' = {
   name: vm.name
   location: location
   identity: {
@@ -60,6 +61,14 @@ resource virtualMachineResource 'Microsoft.Compute/virtualMachines@2023-09-01' =
         }
       }
       imageReference: vm.imageReference
+      dataDisks: [for disk in dataDisks: {
+        lun: disk.lun
+        createOption: disk.createOption
+        diskSizeGB: disk.diskSizeGB
+        managedDisk: {
+          storageAccountType: (disk.storageAccountType ?? 'Standard_LRS')
+        }
+      }]
     }
     networkProfile: {
       networkInterfaces: [
